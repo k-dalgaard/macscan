@@ -1,0 +1,12 @@
+version: "3"
+
+services:
+  base:
+    image: kdalgaard/code
+    network_mode: host
+    container_name: kda_automation
+    volumes:
+      - ./code:/code
+    tty: true
+    working_dir: /code
+#    command: tail -F NONCE
