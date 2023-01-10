@@ -19,9 +19,20 @@ from sqlite3 import Error
 import csv
 import getopt
 import pandas as pd
+import os
 
-#import base64
-#import hashlib
+
+
+
+#file_path =  os.getcwd()
+#db_data =  file_path + '/code/dkt/datalist.db'
+#csv_file =  file_path + '/code/dkt/datalist.csv'
+
+db_data =  '/code/macscan/datalist.db'
+csv_file = '/code/macscan/datalist.csv'
+failed_file = '/code/macscan/failed_hosts.txt'
+mac_list_file = '/code/macscan/mac_lst.csv'
+
 
 url = 'http://macvendors.co/api/%s'
 
@@ -51,8 +62,6 @@ logger.info("#############################")
 
 sw_username = config.username
 password =  config.passwd
-
-
 
 
 #sw_authority =  '10.100.22.5'
@@ -518,14 +527,14 @@ def insert_db_mac_values(conn):
 
 def export_db_to_csv(data_conn):
     db_df = pd.read_sql_query("SELECT * FROM datalist order by location", data_conn)
-    db_df.to_csv('database.csv', index=False)
+    db_df.to_csv(csv_file, index=False)
 
 
 
 
 ##Script starts here
 if __name__ == "__main__":
-        with open('failed_hosts.txt','w') as f:
+        with open(failed_file,'w') as f:
             f.close()
         dateTimeObj = datetime.now()
         timestampStr = dateTimeObj.strftime("%d-%b-%Y %H:%M:%S")
@@ -583,7 +592,7 @@ if __name__ == "__main__":
         vendor_conn = create_connection(db_mac) ##db connect memory dabase for  macvendor 
         create_table(vendor_conn, sql_create_vendor_table) ##greate table in database
 
-        db_data = '/code/macscan/datalist.db'
+        #db_data = '/code/macscan/datalist.db'
         data_conn =  create_connection(db_data) ##db connect dabase for datalist.db
         create_table(data_conn, sql_create_datalist_table) ##greate table in database
 
@@ -632,7 +641,7 @@ if __name__ == "__main__":
            elif loggedin == False:
                 #print('connections to host: ',sw_authority, ' failed' )
                 #logger.info('connections to host: ',sw_authority, ' failed')
-                with open('failed_hosts.txt','a') as f:
+                with open(failed_file,'a') as f:
                     f.write('connections to host: ' + sw_authority + ' failed\n')
                     f.close()
                     #print('connections to host: ',sw_authority, ' failed\n', file=f )
@@ -641,7 +650,7 @@ if __name__ == "__main__":
         
         if no_file == 'no_file' and loggedin == True:
             if mac_list !=[]:
-                with open('krfo_mac_lst.csv','w') as csv_file:
+                with open(mac_list_file,'w') as csv_file:
                     f = csv.DictWriter(csv_file, fieldnames=mac_list[0].keys(),)
                     f.writeheader()
                     f.writerows(mac_list)
