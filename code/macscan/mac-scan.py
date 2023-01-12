@@ -29,7 +29,7 @@ import os
 #csv_file =  file_path + '/code/dkt/datalist.csv'
 
 db_data =  '/code/macscan/datalist.db'
-csv_file = '/code/macscan/datalist.csv'
+csv_file_list = '/code/macscan/datalist.csv'
 failed_file = '/code/macscan/failed_hosts.txt'
 mac_list_file = '/code/macscan/mac_lst.csv'
 
@@ -527,7 +527,8 @@ def insert_db_mac_values(conn):
 
 def export_db_to_csv(data_conn):
     db_df = pd.read_sql_query("SELECT * FROM datalist order by location", data_conn)
-    db_df.to_csv(csv_file, index=False)
+    print(csv_file_list)
+    db_df.to_csv(csv_file_list, index=False)
 
 
 
