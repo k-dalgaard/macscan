@@ -1,4 +1,5 @@
 import base64
+from getpass import getpass
 
 def encode_password(password):
   # Encode the password to base64
@@ -26,7 +27,7 @@ def update_config_file(hashed_username,hashed_password):
 
 # Get the password from the user
 username = input("enter username to encode: ")
-password = input("Enter the password to encode: ")
+password = getpass("Enter the password to encode: ")
 
 # Encode the password and print the result
 encoded_username = encode_password(username)
